@@ -1,25 +1,27 @@
-package com.timwinfred.web;
+package com.timwinfred.web.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.timwinfred.web.models.Person;
+
 /**
- * Servlet implementation class Home
+ * Servlet implementation class ShowPerson
  */
-@WebServlet("/Home")
-public class Home extends HttpServlet {
+@WebServlet("/ShowPerson")
+public class ShowPerson extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Home() {
+    public ShowPerson() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,10 +31,18 @@ public class Home extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String userName = request.getParameter("name");
-		response.setContentType("text/html");
-		PrintWriter out = response.getWriter();
-		out.write("<h1>Hello World, from "+userName+"</h1>");
+		String name = request.getParameter("name");
+		int age = Integer.parseInt(request.getParameter("age"));
+		
+		// Create Model
+		Person person = new Person(name, age);
+		
+		// Set Model for View
+		request.setAttribute("person", person);
+		
+		// Let View handle the Request
+		RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/showPerson.jsp");
+		view.forward(request, response);
 	}
 
 	/**
